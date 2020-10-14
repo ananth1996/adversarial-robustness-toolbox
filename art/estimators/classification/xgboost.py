@@ -116,6 +116,8 @@ class XGBoostClassifier(ClassifierDecisionTree):
             train_data = xgboost.DMatrix(x_preprocessed, label=None)
             predictions = self._model.predict(train_data)
             y_prediction = np.asarray([line for line in predictions])
+            if self.nb_classes == 2:
+                y_prediction = y_prediction.round()
             if len(y_prediction.shape) == 1:
                 y_prediction = to_categorical(labels=y_prediction, nb_classes=self.nb_classes)
         elif isinstance(self._model, xgboost.XGBClassifier):
